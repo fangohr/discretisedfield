@@ -3,6 +3,8 @@ name: conda
 on:
   schedule:
     - cron: '0 0 * * 1'  # run every Monday
+  workflow_dispatch:
+  push:
 
 jobs:
   conda:
@@ -26,6 +28,12 @@ jobs:
         auto-update-conda: true
         activate-environment: conda-environment
         environment-file: binder/environment.yml
+
+    - name: debug
+      run: |
+        python -c "import psutil; print(psutil.virtual_memory())"
+        conda --version
+        python --version
 
     - name: Install testing packages
       run: conda install -c conda-forge -y pytest nbval invoke
